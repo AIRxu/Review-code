@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      /* 父元素有空间的时候，给子元素加上justify-content:center 才会让子元素在水平方向居中，否则无效 */
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-form {
+      margin-top: 200px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      max-width: 400px;
+      /* width:400px */
+    }
+
+    input[type="text"] {
+      border: 10px solid #f7f7f7;
+      padding: 10px;
+      outline: none;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 18px;
+      /* 外，内阴影 */
+      box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1),
+        /* 内阴影 */
+        0 0 5px 1px rgba(0, 0, 0, 0.1) inset; 
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    li {
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #d8d8d8;
+    }
+    li:nth-child(odd){
+      transform: perspective(100px) rotateX(-3deg);
+    }
+    li:nth-child(even){
+      transform: perspective(100px) rotateX(3deg);
+    }
+    li:last-child{
+      color:red;
+    }
+    .heightLight{
+      background-color: yellow;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="search-form">
+    <input type="text"  id="suggest"/>
+    <ul>
+      <li>filter by a city</li>
+      <li>or a state</li>
+    </ul>
+  </div>
+  <script>
+    let item = [{}];
+    let i = [{}]
+    let cities = [{}];
+    fetch('https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json')
+    .then(function(res) {
+      // console.log(res);
+      // 把字符串数据返回成数组的形式
+
+      // 形参
+      // 拿到数据了，想要数组，用res.json()转为数组
+      // 转换也需要时间
+      // return 交给下一步
+      return res.json();
+    })
+    .then(function(data) {
+      // data是转换好的数组形式的数据
+      console.log(data);
+      cities = data;
+    })
+    cities.forEach(function(item,i) { })
+    console.log(item);
+    console.log(i);
+    // 从输入框监听到输入的值
+    const suggest = document.getElementById('suggest');
+    function findMatch(e) {
+      let v = e.target.value;
+      console.log(v);
+      // 把想要的留下来不想要的过滤掉,如果没输入就返回
+      if(!v) return;
+      let suggestCity = cities.filter(function(city) {
+        if(city.city.includes(v) || city.state.includes(v)) {
+          return true
+        }
+        else return false;
+      })
+      // console.log(suggestCity);
+      // 把筛选出来的li渲染到ul中
+      const ul =document.querySelector('ul');
+      ul.innerHTML = suggestCity.map(function(city) {
+        let cityName = city.city;
+        let stateName = city.state;
+        // 高亮：css
+        // Ca
+        // 匹配出来的是：Los Angeles-California
+        // 要给 Ca 加个 hightLight
+        // 怎么加？？？replace
+
+        // replace的用法 xx.replace(a,b) 把a替换成b
+        cityName = cityName.replace(v,`<span class="heightLight">${v}</span>`)
+        stateName = stateName.replace(v,`<span class="heightLight">${v}</span>`)
+        return `
+        <li>${cityName}-${stateName}</li>
+        `
+      })
+      .join('');
+    }
+    suggest.addEventListener('keyup',findMatch);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 37.5px;
+        }
+
+        .view {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-color: pink;
+        }
+        .whole{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%, -50%, 0);
+        }
+
+        .bear {
+            /* rem：相对单位 相对于 html 的 font-size */
+            width: 6.5rem;
+            height: 1.89rem;
+            /* 如果 width 固定了 可以用 auto 达到 水平居中 */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bear-img {
+            background: url("http://s1.map.bdimg.com/zt/y2015/waimaibear/mobile/images/rider1_1b78925.png");
+            width: 2.4rem;
+            height: 1.89rem;
+            /* 背景图大小 和 width height */
+            background-size: 100% 100%;
+            position: absolute;
+            top: 0;
+            right: 0;
+            animation: riderDrive 1s linear forwards;
+        }
+
+        .progress {
+            width: 6.25rem;
+            height: 0.245rem;
+            border: 2px solid #000;
+            border-radius: .5rem;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+            /* 超出隐藏 */
+        }
+
+        .progress-red {
+            background-color: red;
+            width: 0%;
+            height: 100%;
+            float: right;
+            /* animation: progress 1s linear forwards; */
+        }
+
+        /* @keyframes progress {
+            from {
+                width: 0%;
+            }
+            to {
+                width: 100%;
+            }
+        } */
+
+        @keyframes riderDrive {
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            4% {
+                transform: translate3d(0, -.125rem, 0);
+            }
+
+            8% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            16% {
+                transform: translate3d(-.4rem, -.125rem, 0);
+            }
+
+            24% {
+                transform: translate3d(-.8rem, 0, 0);
+            }
+
+            32% {
+                transform: translate3d(-1.2rem, -.125rem, 0rem)
+            }
+
+            40% {
+                transform: translate3d(-1.6rem, 0rem, 0rem)
+            }
+
+            48% {
+                transform: translate3d(-2rem, -.125rem, 0rem)
+            }
+
+            56% {
+                transform: translate3d(-2.4rem, 0rem, 0rem)
+            }
+
+            64% {
+                transform: translate3d(-2.8rem, -.125rem, 0rem)
+            }
+
+            72% {
+                transform: translate3d(-3.2rem, 0rem, 0rem)
+            }
+
+            80% {
+                transform: translate3d(-3.6rem, -.125rem, 0rem)
+            }
+
+            88% {
+                transform: translate3d(-4rem, 0rem, 0rem)
+            }
+
+            96% {
+                transform: translate3d(-4.2rem, -.125rem, 0rem)
+            }
+
+            100% {
+                transform: translate3d(-4.2rem, 0rem, 0rem)
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="view">
+        <div class="whole">
+            <div class="bear">
+                <div class="bear-img"></div>
+            </div>
+            <div class="progress">
+                <div class="progress-red"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 常量，不能改变
+        const progress = document.querySelector('.progress-red')
+        // 后面不能改变
+        // progress = 123
+        // 0 - 100% 满满变化
+        // 每隔 100 ms
+        // 1s = 1000ms
+        var width = 0;
+        var interval = setInterval(function () {
+            // 每隔 100 ms 宽度加10 
+            width = width + 1;
+            if (width > 100) {
+                // 定时器过期
+                // 清除掉
+                clearInterval(interval);
+                // 后面的语句 停下来
+                return;
+            }
+            // css
+            progress.style.width = width + '%';  // 10 % 拼在一起 作为一个字符串
+        }, 10)
+    </script>
+</body>
+
+</html>
