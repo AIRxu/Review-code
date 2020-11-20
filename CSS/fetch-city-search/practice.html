@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+    }
+
+    .city-filter {
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+      margin-top: 200px;
+    }
+
+    input[type="text"] {
+      border: 10px solid #f7f7f7;
+      padding: 10px;
+      border-radius: 6px;
+      outline: none;
+      text-align: center;
+      font-size: 18px;
+      box-shadow: 4px -4px 1px 1px rgba(0, 0, 0, 0.1),
+        4px -4px 3px 3px rgba(0, 0, 0, 0.1) inset;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    li {
+      border: 1px solid #d8d8d8;
+      padding: 10px;
+    }
+
+    li:nth-child(odd) {
+      transform: perspective(100px) rotateX(-3deg);
+    }
+
+    li:nth-child(even) {
+      transform: perspective(100px) rotateX(3deg);
+    }
+    .highlight{
+      background-color: yellow;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="city-filter">
+    <input type="text" id="searchInput">
+    <ul>
+      <li>filter by a city</li>
+      <li>or a state</li>
+    </ul>
+  </div>
+
+  <script>
+    // 首先拿到城市数据
+    let cities = [];
+    fetch('https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json')
+      .then((res) => {
+        // console.log(res);
+        return res.json();
+      })
+      .then((data) => {
+        // console.log(data);
+        cities = data;
+      })
+    // 拿到城市数据之后将其筛选出来
+    const searchInput = document.getElementById('searchInput');
+    function findMatch(e) {
+      let val = e.target.value;
+      // console.log(val);
+      if (!val) return;
+      let selectedCity = cities.filter((chooseCity) => {
+        if (chooseCity.city.includes(val) || chooseCity.state.includes(val)) {
+          return true;
+        }
+        return false;
+      })
+      // console.log(selectedCity);
+      const ul = document.querySelector('ul');
+      ul.innerHTML = selectedCity.map((chooseCity) => {
+        let cityName = chooseCity.city;
+        let stateName = chooseCity.state;
+        cityName = cityName.replace(val, `<span class = "highlight">${val}</span>`)
+        stateName = stateName.replace(val, `<span class = "highlight">${val}</span>`)
+        return `
+      <li>${cityName}-${stateName}</li>
+      `
+      })
+        .join('')
+    }
+
+
+
+    searchInput.addEventListener('keyup', findMatch)
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .container{
+      width: 200px;
+      height: 600px;
+      overflow: scroll;
+      /* overflow-x: hidden; */
+      border: 1px solid #000;
+    }
+    .target{
+      margin-top: 900px;
+      width: 100px;
+      height: 100px;
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="target"></div>
+  </div>
+
+  <script>
+    // 属性、方法
+    // 抽象：人类   具体：小明
+    // 属性：小明.age: 18   小明.school:ECUT
+    // 方法：小明.say()   小明.learn()
+
+    const target = document.querySelector('.target')
+    let observer = new IntersectionObserver(function (nodes) {
+      // const node = nodes[0]
+      nodes.forEach(function (node) {
+        if (node.isIntersecting) {
+          console.log('已经出现了');
+        }
+      })
+    },{
+      rootMargin: '0px 0px 100px 0px',        // 上 右 下 左
+      threshold: [0.5, 1]
+    })
+    // 开始观察
+    // 如果出现在视窗范围内，他就会通知我  用回调的方法
+    observer.observe(target);
+
+  </script>
+</body>
+</html>
